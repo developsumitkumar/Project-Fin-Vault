@@ -1,40 +1,69 @@
+<div align="center">
 
+<img src="https://img.shields.io/badge/FinVault-Fintech%20Wallet%20Platform-4CAF50?style=for-the-badge&logo=wallet&logoColor=white" alt="FinVault"/>
 
 # FinVault
 
-### A full-stack fintech platform simulating real-world financial workflows —
-### KYC onboarding, payment processing, and personal finance tracking.
+**A production-grade fintech wallet platform for digital payments, expense management, KYC verification, and social bill splitting.**
 
-<br/>
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-fin--vault--zeta.vercel.app-4CAF50?style=flat-square&logo=vercel)](https://fin-vault-zeta.vercel.app/)
+[![Backend](https://img.shields.io/badge/Backend-Spring%20Boot%203-6DB33F?style=flat-square&logo=spring)](https://spring.io/projects/spring-boot)
+[![Frontend](https://img.shields.io/badge/Frontend-React%20%2B%20Vite-61DAFB?style=flat-square&logo=react)](https://react.dev/)
+[![Database](https://img.shields.io/badge/Database-MongoDB%20Atlas-47A248?style=flat-square&logo=mongodb)](https://www.mongodb.com/atlas)
+[![License](https://img.shields.io/badge/License-MIT-blue?style=flat-square)](LICENSE)
 
 </div>
 
 ---
 
-## Overview
+## Table of Contents
 
-FinVault is a production-style fintech application built from scratch to demonstrate end-to-end backend architecture, compliance-aware design, and modern full-stack development. It mirrors the core workflows found in real financial products — secure onboarding, KYC verification, payment lifecycle management, and a passbook-style expense ledger with group split-bill settlement.
-
-This project is being developed incrementally, with each module building on the last to reflect how fintech systems are actually structured in the industry.
+- [Overview](#overview)
+- [Features](#features)
+- [Tech Stack](#tech-stack)
+- [Architecture](#architecture)
+- [Core Workflows](#core-workflows)
+- [API Reference](#api-reference)
+- [Getting Started](#getting-started)
+- [Deployment](#deployment)
+- [Roadmap](#roadmap)
 
 ---
 
-## System Flow
+## Overview
+
+FinVault is a full-stack fintech application that simulates core banking and payment workflows in a clean, modern interface. Built with a modular architecture and secure JWT-based authentication, it handles everything from user onboarding and KYC verification to wallet transfers, expense tracking, and group bill settlements.
+
+It is designed to reflect production-level engineering practices — including role-based access control, ledger-driven financial history, and KYC-gated transaction flows.
+
+> **Live:** [https://fin-vault-zeta.vercel.app](https://fin-vault-zeta.vercel.app)
+
+---
+
+## Features
+
+| Module | Capabilities |
+|---|---|
+| **Authentication** | JWT-based registration & login, protected routes, role-aware navigation |
+| **KYC Verification** | User KYC submission, admin approval/rejection, KYC-gated wallet access |
+| **Wallet & Transfers** | Default wallet balance, send money to connections or any registered user |
+| **Expenses** | Record external expenses, wallet deduction, category tracking |
+| **Passbook** | Full debit/credit history with timestamps, categories, and human-readable descriptions |
+| **Connections** | Send, accept, reject, withdraw, and delete user connections |
+| **Split Bills** | Create splits with connected users, auto-invite non-connected members, settle shares |
+| **Analytics** | Category-wise and monthly spending insights powered by ledger data |
+
+---
+
+## Tech Stack
 
 ```
-User Registration & Login
-        ↓
-  Submit KYC Documents
-        ↓
-  Admin Review & Approval
-        ↓
-  Payment Initiated (with category tag)
-        ↓
-  Ledger Entry created automatically
-        ↓
-  Category-wise Analytics & Summary
-        ↓
-  Split Bill → Settlement → Payment → Ledger
+Frontend    React 18 + Vite · Material UI · Pastel Green Fintech Theme
+Backend     Java 17 · Spring Boot · Spring Security
+Auth        JWT (JSON Web Tokens) · Role-Based Access Control
+Database    MongoDB Atlas
+Deployment  Vercel (Frontend) · Render (Backend)
+Version     Git + GitHub
 ```
 
 ---
@@ -42,162 +71,122 @@ User Registration & Login
 ## Architecture
 
 ```
-React Frontend (Vite)
-        │
-        ▼
-Spring Boot API Gateway  ←  JWT Authentication + Role-Based Access
-        │
-   ┌────┼────────────────┐
-   ▼    ▼                ▼
- KYC  Payments        Finance
-Module  Module         Module
-   │    │                │
-   │  (gates)       (ledger + splits)
-   └────┴────────────────┘
-              │
-              ▼
-        MongoDB Atlas
-  (users · kyc_docs · payments
-   ledger_entries · split_bills)
+FinVault
+├── finvault-backend
+│   ├── config/              # Security config, CORS, JWT filter setup
+│   ├── controller/          # REST controllers for each domain
+│   ├── dto/                 # Request/response transfer objects
+│   ├── model/               # MongoDB document models
+│   ├── repository/          # Spring Data MongoDB repositories
+│   ├── security/            # JWT provider, auth filter, user details service
+│   ├── service/             # Business logic layer
+│   └── resources/           # application.properties, env config
+│
+└── finvault-frontend
+    └── src
+        ├── api/             # Axios instance and endpoint definitions
+        ├── components/      # Reusable UI components
+        ├── layout/          # Sidebar, topbar, mobile navigation
+        ├── pages/           # Route-level page components
+        ├── services/        # Frontend service layer (auth, wallet, etc.)
+        └── theme/           # MUI theme overrides, color palette
 ```
-
-**Module dependency chain:**
-KYC verification → gates payment access → every payment auto-creates a ledger entry → ledger entries power category analytics and split-bill settlement.
 
 ---
 
-## Feature Progress
+## Core Workflows
 
-### Auth & Security
-| Feature | Status |
-|---|---|
-| JWT login / register | ✅ Done |
-| Role-based access (USER / ADMIN) | ✅ Done |
-| Token refresh & expiry handling | ⏳ Planned |
+```
+User registers / logs in
+        ↓
+User submits KYC documents
+        ↓
+Admin reviews and approves KYC
+        ↓
+Wallet features unlocked
+        ↓
+User sends money · records expenses · creates split bills
+        ↓
+Ledger entries auto-generated on every transaction
+        ↓
+Passbook and analytics reflect real-time ledger state
+```
 
-### KYC Module
-| Feature | Status |
-|---|---|
-| KYC document submission | ✅ Done |
-| Admin approval / rejection workflow | ✅ Done |
-| Status states: SUBMITTED → IN REVIEW → VERIFIED / REJECTED | ✅ Done |
-| KYC gating on payment access | ✅ Done |
+### Split Bill Flow
 
-### Payments Module
-| Feature | Status |
-|---|---|
-| Initiate & process mock transactions | ✅ Done |
-| Payment category tagging | ✅ Done |
-| Payment states: INITIATED → PROCESSING → SUCCESS / FAILED / FLAGGED | 🚧 In Progress |
-| Idempotency key enforcement | ⏳ Planned |
-| Rule-based fraud flagging | ⏳ Planned |
-| Reconciliation report | ⏳ Planned |
-
-### Finance & Ledger Module
-| Feature | Status |
-|---|---|
-| Single-entry expense ledger (passbook model) | ✅ Done |
-| Category-wise expense tracking | ✅ Done |
-| Group expense splitting (multi-user settlement) | ✅ Done |
-| Debt settlement with payment record | ✅ Done |
-| Monthly category reports & summary | ✅ Done |
-
-### Frontend (React + Vite)
-| Feature | Status |
-|---|---|
-| Project scaffold (Vite + React) | ✅ Done |
-| Auth screens (login / register) | ⏳ Planned |
-| KYC submission form | ⏳ Planned |
-| Admin dashboard | ⏳ Planned |
-| Transaction history & ledger view | ⏳ Planned |
-| Spending analytics dashboard | ⏳ Planned |
+```
+Creator adds members (connections or email)
+        ↓
+Non-connected members receive auto connection invite
+        ↓
+Full bill amount deducted from creator wallet
+        ↓
+Members settle their individual share
+        ↓
+Settlement amount credited back to creator
+```
 
 ---
 
-## Tech Stack
+## API Reference
 
-| Layer | Technology |
-|---|---|
-| Language | Java 17 |
-| Backend framework | Spring Boot 3 |
-| Security | Spring Security + JWT |
-| Database | MongoDB Atlas |
-| Frontend | React 18 + Vite |
-| UI components | Material UI (MUI) |
-| API style | RESTful JSON APIs |
-| Build tool | Maven (mvnw) |
-| Version control | Git + GitHub |
+### Authentication
+| Method | Endpoint | Description |
+|---|---|---|
+| `POST` | `/api/auth/register` | Register a new user |
+| `POST` | `/api/auth/login` | Login and receive JWT |
 
----
+### User
+| Method | Endpoint | Description |
+|---|---|---|
+| `GET` | `/api/user/profile` | Fetch authenticated user profile |
+| `PUT` | `/api/user/profile` | Update user profile |
 
-## Project Structure
-```
-FinVault/
-│
-├── finvault-backend/
-│   ├── src/
-│   │   ├── main/
-│   │   │   └── java/com/finvault/
-│   │   │       ├── config/
-│   │   │       │   └── SecurityConfig.java              # Spring Security + JWT filter chain
-│   │   │       ├── controller/
-│   │   │       │   ├── AdminController.java              # Admin: KYC approval/rejection
-│   │   │       │   ├── AuthController.java               # Register, login endpoints
-│   │   │       │   ├── KycController.java                # KYC submission & status
-│   │   │       │   ├── LedgerController.java             # Passbook, summary & category views
-│   │   │       │   ├── PaymentController.java            # Initiate payments, payment history
-│   │   │       │   ├── SplitBillController.java          # Group splits & settlement
-│   │   │       │   ├── UserController.java               # User profile endpoints
-│   │   │       │   └── TestController.java               # Dev/test endpoint
-│   │   │       ├── dto/
-│   │   │       │   ├── AuthResponse.java                 # JWT token response wrapper
-│   │   │       │   ├── LoginRequest.java                 # Login payload
-│   │   │       │   └── RegisterRequest.java              # Registration payload
-│   │   │       ├── model/
-│   │   │       │   ├── Kyc.java                          # KYC document (status, timestamps)
-│   │   │       │   ├── LedgerEntry.java                  # Passbook entry (debit/credit, category)
-│   │   │       │   ├── Payment.java                      # Payment record (amount, status, category)
-│   │   │       │   ├── SplitBill.java                    # Group expense document
-│   │   │       │   ├── SplitBillMember.java              # Per-member share & settlement status
-│   │   │       │   └── User.java                         # User document (roles, KYC status)
-│   │   │       ├── repository/
-│   │   │       │   ├── KycRepository.java                # MongoDB KYC queries
-│   │   │       │   ├── LedgerRepository.java             # MongoDB ledger entry queries
-│   │   │       │   ├── PaymentRepository.java            # MongoDB payment queries
-│   │   │       │   ├── SplitBillRepository.java          # MongoDB split bill queries
-│   │   │       │   └── UserRepository.java               # MongoDB user queries
-│   │   │       ├── security/
-│   │   │       │   ├── CustomUserDetailsService.java     # Spring Security user loading
-│   │   │       │   ├── JwtAuthenticationFilter.java      # Request-level JWT filter
-│   │   │       │   └── JwtService.java                   # Token generation & validation
-│   │   │       ├── service/
-│   │   │       │   ├── KycService.java                   # KYC workflow & status transitions
-│   │   │       │   ├── LedgerService.java                # Ledger entry creation & queries
-│   │   │       │   ├── PaymentService.java               # Payment processing & KYC gating
-│   │   │       │   ├── SplitBillService.java             # Split logic & settlement flow
-│   │   │       │   └── UserService.java                  # User business logic
-│   │   │       └── FinvaultBackendApplication.java       # Application entry point
-│   │   ├── resources/
-│   │   └── test/
-│   ├── pom.xml
-│   ├── mvnw / mvnw.cmd
-│   └── HELP.md
-│
-├── finvault-frontend/
-│   ├── public/
-│   ├── src/
-│   │   ├── assets/
-│   │   ├── App.jsx                                       # Root component & routing
-│   │   ├── App.css
-│   │   ├── main.jsx                                      # React DOM entry point
-│   │   └── index.css
-│   ├── index.html
-│   ├── package.json
-│   ├── eslint.config.js
-│   └── .gitignore
-│
-└── .gitignore
-```
+### KYC
+| Method | Endpoint | Description |
+|---|---|---|
+| `POST` | `/api/kyc/submit` | Submit KYC documents |
+| `GET` | `/api/kyc/status` | Check KYC status |
+
+### Admin
+| Method | Endpoint | Description |
+|---|---|---|
+| `GET` | `/api/admin/kyc/pending` | List pending KYC submissions |
+| `POST` | `/api/admin/kyc/approve` | Approve a KYC submission |
+| `POST` | `/api/admin/kyc/reject` | Reject a KYC submission |
+
+### Connections
+| Method | Endpoint | Description |
+|---|---|---|
+| `POST` | `/api/connections/request` | Send connection request |
+| `POST` | `/api/connections/{id}/accept` | Accept a connection request |
+| `POST` | `/api/connections/{id}/reject` | Reject a connection request |
+| `POST` | `/api/connections/{id}/withdraw` | Withdraw a sent request |
+| `DELETE` | `/api/connections/{id}` | Remove an existing connection |
+| `GET` | `/api/connections/my` | List all connections |
+
+### Transfers & Payments
+| Method | Endpoint | Description |
+|---|---|---|
+| `POST` | `/api/transfer/send` | Send money to a user |
+| `POST` | `/api/payments/initiate` | Record an external expense |
+| `GET` | `/api/payments/my` | List all expense payments |
+
+### Passbook & Analytics
+| Method | Endpoint | Description |
+|---|---|---|
+| `GET` | `/api/ledger/passbook` | Full transaction passbook |
+| `GET` | `/api/ledger/summary` | Balance summary |
+| `GET` | `/api/ledger/category` | Category-wise spending |
+| `GET` | `/api/ledger/monthly` | Monthly spending breakdown |
+
+### Split Bills
+| Method | Endpoint | Description |
+|---|---|---|
+| `POST` | `/api/split-bills` | Create a new split bill |
+| `GET` | `/api/split-bills/my` | List active and settled split bills |
+| `POST` | `/api/split-bills/{id}/settle` | Settle a member's share |
+
 ---
 
 ## Getting Started
@@ -205,107 +194,81 @@ FinVault/
 ### Prerequisites
 
 - Java 17+
-- Maven (or use the included `mvnw` wrapper)
-- MongoDB Atlas account (or local MongoDB)
-- Node.js 18+ *(for frontend)*
+- Node.js 18+
+- MongoDB Atlas account
 
 ### Backend Setup
 
 ```bash
-# Clone the repository
-git clone https://github.com/developsumitkumar/FinVault.git
-cd FinVault/finvault-backend
-
-# Configure MongoDB URI in src/main/resources/application.yml
-# spring.data.mongodb.uri=mongodb+srv://<user>:<pass>@cluster.mongodb.net/finvault
-
-# Run the backend
+cd finvault-backend
 ./mvnw spring-boot:run
 ```
 
-The API will be available at `http://localhost:8080`.
+Backend runs on `http://localhost:8080`
+
+**Required configuration** (`application.properties` or environment):
+
+```properties
+spring.data.mongodb.uri=<your-mongodb-atlas-uri>
+server.port=${PORT:8080}
+```
 
 ### Frontend Setup
 
 ```bash
-cd FinVault/finvault-frontend
+cd finvault-frontend
 npm install
 npm run dev
 ```
 
-The frontend will be available at `http://localhost:5173`.
+Frontend runs on `http://localhost:5173`
 
----
+**Required `.env`:**
 
-## API Reference
+```env
+# Local development
+VITE_API_URL=http://localhost:8080/api
 
-### Auth
-```
-POST   /api/auth/register               Register a new user
-POST   /api/auth/login                  Login and receive JWT
-```
-
-### KYC
-```
-POST   /api/kyc/submit                  Submit KYC documents (USER)
-GET    /api/kyc/status                  Get own KYC status (USER)
-```
-
-### Admin
-```
-POST   /api/admin/kyc/approve           Approve a KYC application (ADMIN)
-POST   /api/admin/kyc/reject            Reject a KYC application (ADMIN)
-```
-
-### Payments
-```
-POST   /api/payments/initiate           Initiate a payment (KYC-gated)
-GET    /api/payments/my                 View own payment history
-```
-
-### Ledger
-```
-GET    /api/ledger/my                   View full passbook / ledger
-GET    /api/ledger/summary              Total credits & debits summary
-GET    /api/ledger/category             Category-wise expense breakdown
-```
-
-### Split Bills
-```
-POST   /api/split-bills                 Create a group split expense
-GET    /api/split-bills/my             View all splits involving you
-POST   /api/split-bills/{id}/settle    Settle your share (creates payment + ledger entry)
+# Production
+VITE_API_URL=https://your-render-backend-url/api
 ```
 
 ---
 
-## Key Concepts Demonstrated
+## Deployment
 
-- **JWT authentication** — stateless auth with role claims embedded in the token, validated on every request via `JwtAuthenticationFilter`
-- **Role-based access control** — `USER` and `ADMIN` roles enforced via Spring Security at the controller level
-- **KYC compliance workflow** — status state machine (SUBMITTED → IN REVIEW → VERIFIED / REJECTED) with admin-controlled transitions
-- **KYC gating** — payment APIs blocked for users whose KYC is not verified
-- **Passbook-style ledger** — every payment automatically generates a ledger entry for full transaction history
-- **Category-based analytics** — expenses tagged by category and queryable via summary and breakdown endpoints
-- **Split-bill settlement** — multi-user expense splitting where settlement triggers a real payment and ledger entry
-- **Layered architecture** — clean separation of controller → service → repository → model across all modules
+| Service | Platform | URL |
+|---|---|---|
+| Frontend | Vercel | [fin-vault-zeta.vercel.app](https://fin-vault-zeta.vercel.app) |
+| Backend | Render | *(your Render URL)* |
+| Database | MongoDB Atlas | *(managed cloud cluster)* |
+
+A `Dockerfile` is included for containerized backend deployment.
 
 ---
 
 ## Roadmap
 
-```
-[✅] Phase 1 — Auth & JWT (login, register, role-based access)
-[✅] Phase 2 — KYC module (submission, admin approval, gating)
-[✅] Phase 3 — Payments module + ledger + split-bill settlement
-[🚧] Phase 4 — Advanced analytics + frontend (React + MUI)
-[⏳] Phase 5 — Fraud detection & idempotency
-[⏳] Phase 6 — Deployment (Railway / Render)
-```
+- [ ] Dedicated wallet management page
+- [ ] In-app notifications system
+- [ ] Cloud-based avatar upload
+- [ ] Loan application and admin approval workflow
+- [ ] Investment plans with admin-managed interest rates
+- [ ] PDF export for passbook and analytics reports
+- [ ] Transaction idempotency and duplicate prevention
+- [ ] Fraud detection rules engine
+- [ ] Advanced analytics dashboard
 
 ---
 
 ## Author
 
-**Sumit Kumar**
-Full-Stack Engineer · NIIT StackRoute Certified
+**Sumit Kumar** · Full-Stack Developer
+
+[![GitHub](https://img.shields.io/badge/GitHub-sumit--kumar-181717?style=flat-square&logo=github)](https://github.com/developsumitkumar/)
+
+---
+
+<div align="center">
+  <sub>Built with Spring Boot, React, and MongoDB Atlas</sub>
+</div>
