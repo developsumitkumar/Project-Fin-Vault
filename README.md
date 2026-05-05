@@ -39,7 +39,10 @@ It is designed to reflect production-level engineering practices — including r
 > **Live:** [https://fin-vault-zeta.vercel.app](https://fin-vault-zeta.vercel.app)
 
 ---
-
+```
+To approve your KYC (Login as admin): email- sumit@test.com
+                                      password- 123456
+```
 ## Features
 
 | Module | Capabilities |
