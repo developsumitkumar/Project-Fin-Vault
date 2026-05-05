@@ -6,13 +6,6 @@
 
 **A production-grade fintech wallet platform for digital payments, expense management, KYC verification, and social bill splitting.**
 
-[![Live Demo](https://img.shields.io/badge/Live%20Demo-fin--vault--zeta.vercel.app-4CAF50?style=flat-square&logo=vercel)](https://fin-vault-zeta.vercel.app/)
-[![Backend](https://img.shields.io/badge/Backend-Spring%20Boot%203-6DB33F?style=flat-square&logo=spring)](https://spring.io/projects/spring-boot)
-[![Frontend](https://img.shields.io/badge/Frontend-React%20%2B%20Vite-61DAFB?style=flat-square&logo=react)](https://react.dev/)
-[![Database](https://img.shields.io/badge/Database-MongoDB%20Atlas-47A248?style=flat-square&logo=mongodb)](https://www.mongodb.com/atlas)
-[![License](https://img.shields.io/badge/License-MIT-blue?style=flat-square)](LICENSE)
-
-</div>
 
 ---
 
